@@ -2,7 +2,7 @@
 
 A single page options research tool built on my own SPX market data pipeline. Describe a trading idea in plain English, and an AI assistant turns it into a strategy that a validator checks and the engine backtests: Black 76 pricing on the volatility smile at every snapshot, futures delta hedging, rolls, fees and P&L attribution.
 
-**[Live demo](#)** (link added once published)
+**[Live demo](https://alexbuzelan.github.io/llm-spx-options-strategy-builder/)**
 
 ![Strategy lab](docs/screenshots/strategy-lab.png)
 
@@ -59,7 +59,7 @@ A single page options research tool built on my own SPX market data pipeline. De
 
 - SPX, 15 October to 4 November 2026: 5,726 snapshots, 3 expiries, 16,167 fitted smiles.
 - Each row holds the snapshot time, expiry, spot, forward, time to expiry and the 3 quadratic coefficients. No raw option quotes are included.
-- **Prices in the backtest are model prices** from these fitted curves.
+- Prices in the backtest are model prices derived from these fitted curves.
 
 ## Repository
 
