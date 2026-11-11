@@ -251,6 +251,23 @@
   .chat-run { display: block; margin-top: 6px; padding: 0; border: 0; background: none; font: inherit; font-size: 13px; font-weight: 600; color: var(--accent); cursor: pointer; text-align: left; }
   .chat-run:hover:not(:disabled) { text-decoration: underline; }
   .chat-run:disabled { color: var(--na); font-weight: 500; cursor: default; }
+  /* End of a demo: Run backtest is shown being pressed */
+  .demo-press { animation: demoPress 1.3s ease-in-out; position: relative; z-index: 1; }
+  .demo-cursor { position: fixed; z-index: 120; pointer-events: none; opacity: 0; transform: translate(-4px, -2px);
+                 filter: drop-shadow(0 2px 3px rgba(0,0,0,.3));
+                 transition: left 1s cubic-bezier(.45,.05,.3,1), top 1s cubic-bezier(.45,.05,.3,1), opacity .3s, transform .15s; }
+  .demo-cursor.on { opacity: 1; }
+  .demo-cursor.press { transform: translate(-4px, -2px) scale(.82); }
+  .demo-cursor::after { content: ""; position: absolute; left: 0; top: 0; width: 34px; height: 34px; margin: -14px 0 0 -14px;
+                        border-radius: 50%; border: 2px solid var(--accent); opacity: 0; }
+  .demo-cursor.press::after { animation: demoRipple .5s ease-out; }
+  @keyframes demoRipple { from { opacity: .8; transform: scale(.3); } to { opacity: 0; transform: scale(1.4); } }
+  @keyframes demoPress {
+    0% { box-shadow: 0 0 0 0 rgba(31,95,139,.55); }
+    45% { box-shadow: 0 0 0 7px rgba(31,95,139,.18); transform: scale(1.04); }
+    75% { box-shadow: 0 0 0 9px rgba(31,95,139,0); transform: scale(.97); }
+    100% { box-shadow: 0 0 0 0 rgba(31,95,139,0); transform: scale(1); }
+  }
   .bubble.note { align-self: center; background: none; color: var(--dim); text-align: center; }
   .bubble.err { align-self: center; background: #fbeceb; color: var(--neg); }
   /* Without a key: recorded conversations to watch, and the visitor's own key */
@@ -355,7 +372,7 @@
   .lab { display: flex; align-items: center; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--dim); font-weight: 600; border-right: 1px solid #eceff2; }
   .lab.seg { flex-direction: column; align-items: stretch; justify-content: center; gap: 4px; padding-right: 10px; }
   /* The three buttons do not set the row's height, so both rows of tiles are the same height; they sit at the
-     bottom and reach up towards Performance. (Not below 760px, where the buttons are in a row.) */
+     bottom and reach up towards the P&L split. (Not below 760px, where the buttons are in a row.) */
   @media (min-width: 761px) { .lab.seg { contain: size; justify-content: flex-end; overflow: visible; } }
   .segb { font: inherit; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; font-weight: 600; border: 1px solid var(--line); background: #fff; color: var(--dim); border-radius: 6px; padding: 3px 6px; cursor: pointer; text-align: left; }
   .segb.on { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
@@ -2440,7 +2457,7 @@ var hyparquet=(()=>{var G=Object.defineProperty;var Ne=Object.getOwnPropertyDesc
     return '<div class="tile"><div class="k">' + esc(label) + '<span class="info" tabindex="0" aria-label="' + esc(note) + '">i<span class="tip" role="tooltip">' +
       esc(note) + '</span></span></div><div class="v ' + (cls || "") + '">' + esc(value) + "</div></div>";
   }
-  var btSeg = "pnl";
+  var btSeg = "attr";
   function btRenderSummary(res) {
     var V = res ? btTileValues(res) : null, NA = "n/a";
     function m(v) { return v === null || v === undefined || !isFinite(v) ? NA : btMoney(v); }
@@ -2471,15 +2488,16 @@ var hyparquet=(()=>{var G=Object.defineProperty;var Ne=Object.getOwnPropertyDesc
       btTile("Realized P&L", V ? m(V.realized) : NA, V ? c(V.realized) : "na", "the rest: spot, time and the hedges"),
       btTile("Costs", V ? m(V.costs) : NA, V ? c(V.costs) : "na", "fills against fair value, plus fees")
     ];
+    // An options strategy first: the P&L split always shows; attribution, performance and trades are one click away.
     $("btSummary").innerHTML =
-      '<div class="grp"><div class="lab">Performance</div>' + perf.join("") + "</div>" +
+      '<div class="grp"><div class="lab">P&amp;L split</div>' + pnl.join("") + "</div>" +
       '<div class="grp"><div class="lab seg" role="tablist">' +
-        '<button type="button" role="tab" class="segb" data-v="pnl">P&amp;L split</button>' +
         '<button type="button" role="tab" class="segb" data-v="attr">Attribution</button>' +
+        '<button type="button" role="tab" class="segb" data-v="perf">Performance</button>' +
         '<button type="button" role="tab" class="segb" data-v="trade">Trade split</button></div>' +
-        '<div class="segpane" data-v="pnl">' + pnl.join("") + "</div>" +
-        '<div class="segpane" data-v="trade">' + trade.join("") + "</div>" +
-        '<div class="segpane" data-v="attr">' + attr.join("") + "</div></div>";
+        '<div class="segpane" data-v="attr">' + attr.join("") + "</div>" +
+        '<div class="segpane" data-v="perf">' + perf.join("") + "</div>" +
+        '<div class="segpane" data-v="trade">' + trade.join("") + "</div></div>";
     $("resPeriod").textContent = res ? btPeriod(res) : "No run yet";
     btShowSeg();
   }
@@ -3507,10 +3525,10 @@ var hyparquet=(()=>{var G=Object.defineProperty;var Ne=Object.getOwnPropertyDesc
     var list = chatReplays(), box = document.createElement("div");
     box.className = "as-welcome enter";
     var html = "";
-    if (list.length) html += "<p><b>" + (after ? "Watch another recorded conversation:" : "Watch a recorded conversation:") + "</b></p>" +
+    if (list.length) html += "<p><b>" + (after ? "Watch another demo:" : "Watch a demo:") + "</b></p>" +
       '<div class="ideas">' + list.map(function (r, i) {
         // Titles only: the summary stays in the recording but is not shown
-        return '<button type="button" class="idea" data-rp="' + i + '"><b>' + esc(r.title || "Recorded conversation") + "</b></button>";
+        return '<button type="button" class="idea" data-rp="' + i + '"><b>' + esc(r.title || "Demo") + "</b></button>";
       }).join("") + "</div>";
     html += "<p><b>" + (list.length ? "Or chat live with your own Anthropic API key:" : "Chat live with your own Anthropic API key:") + "</b></p>" +
       '<form class="as-key"><input type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-..." aria-label="Anthropic API key">' +
@@ -3567,8 +3585,11 @@ var hyparquet=(()=>{var G=Object.defineProperty;var Ne=Object.getOwnPropertyDesc
     if (!rp || !Array.isArray(rp.turns) || chat.sending || chat.replaying) return;
     chat.client = null;
     chat.replaying = true; chat.replayStop = false;
+    // Every demo starts from scratch: the full assistant window, and no strategy, so no rule is green yet.
+    asExpand();
+    chatSetBox("");
     chatStart();
-    var note = chatBubble("Recorded conversation" + (rp.model ? " (" + rp.model + ")" : "") + ": " + (rp.title || ""), "note");
+    var note = chatBubble("Demo: " + (rp.title || ""), "note");
     $("asLog").insertBefore(note, $("asLog").firstChild);   // above the greeting
     var queue = [];
     chat.sender = function (body, onText) { return chatReplaySend(queue)(body, onText); };
@@ -3590,8 +3611,40 @@ var hyparquet=(()=>{var G=Object.defineProperty;var Ne=Object.getOwnPropertyDesc
       chatState();
     }
     if (chat.replayStop) { chatStart(); return; }
-    chatBubble("End of the recorded conversation." + ($("btStrategy").value.trim() ? " Press Run backtest to run this strategy." : ""), "note");
-    if (!chat.userKey) chatWelcome(true);
+    var canRun = $("btStrategy").value.trim() && !$("btRunTop").disabled;
+    chatBubble("End of the demo." + (canRun ? " Pressing Run backtest…" : ""), "note");
+    if (!canRun) { if (!chat.userKey) chatWelcome(true); return; }
+    var log = $("asLog").firstChild;            // the same chat still on screen later
+    await chatDemoRun();
+    // The other demos and the key box come back once the results have had 4 seconds on screen.
+    for (var w = 0; w < 120 && !/Backtest done/.test($("btMsg").textContent); w++) await chatSleep(250);
+    await chatSleep(chatReduced.matches ? 0 : 4000);
+    if (!chat.userKey && !chat.replaying && !chat.sending && $("asLog").firstChild === log) chatWelcome(true);
+  }
+  // End of a demo: a pointer moves from the chat to Run backtest at the top and clicks it, then the backtest
+  // runs, so the visitor sees the results and learns where the button is.
+  async function chatDemoRun() {
+    var top = $("btRunTop"), fast = chatReduced.matches;
+    await chatSleep(fast ? 0 : 700);
+    var cur = document.createElement("div");
+    cur.className = "demo-cursor";
+    cur.innerHTML = '<svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 2.5v17.2l4.6-4.4 2.9 6.6 2.7-1.2-2.9-6.5h6.4z" ' +
+      'fill="#fff" stroke="#18222d" stroke-width="1.5" stroke-linejoin="round"/></svg>';
+    var links = $("asLog").querySelectorAll(".chat-run:not(:disabled)"), from = links.length ? links[links.length - 1] : $("asMsg");
+    var a = from.getBoundingClientRect(), b = top.getBoundingClientRect();
+    cur.style.left = (a.left + 30) + "px"; cur.style.top = (a.top + a.height / 2) + "px";
+    document.body.appendChild(cur);
+    void cur.offsetWidth;
+    cur.classList.add("on");
+    await chatSleep(fast ? 0 : 400);
+    cur.style.left = (b.left + b.width / 2) + "px"; cur.style.top = (b.top + b.height / 2) + "px";
+    await chatSleep(fast ? 0 : 1100);
+    cur.classList.add("press"); top.classList.add("demo-press");
+    await chatSleep(fast ? 0 : 350);
+    if (!chat.replaying && !chat.sending && !top.disabled) btRun();
+    await chatSleep(fast ? 0 : 500);
+    cur.classList.remove("on"); top.classList.remove("demo-press");
+    setTimeout(function () { cur.remove(); }, 400);
   }
   // Recording (?record): the turns of this chat, as received from the API, saved as a replay file.
   var CHAT_RECORD = /[?&]record\b/.test(location.search);
