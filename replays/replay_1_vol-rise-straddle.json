@@ -1,6 +1,6 @@
 {
   "format": "chat-replay-1",
-  "title": "Sell an ATM straddle when ATM vol rises 2 vol points",
+  "title": "Sell an ATM straddle when vol rises 2 vol points",
   "summary": "Vol based entry on a crossing, daily hedge, profit target and stop loss",
   "model": "claude-sonnet-5-5",
   "recorded_utc": "2026-11-10T22:21:42Z",

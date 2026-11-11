@@ -3,7 +3,7 @@
 window.CHAT_REPLAYS = [
  {
   "format": "chat-replay-1",
-  "title": "Sell an ATM straddle when ATM vol rises 2 vol points",
+  "title": "Sell an ATM straddle when vol rises 2 vol points",
   "summary": "Vol based entry on a crossing, daily hedge, profit target and stop loss",
   "model": "claude-sonnet-5-5",
   "recorded_utc": "2026-11-10T22:21:42Z",
@@ -283,7 +283,7 @@ window.CHAT_REPLAYS = [
  },
  {
   "format": "chat-replay-1",
-  "title": "Sell ATM put spread if spot drops 1%",
+  "title": "Sell put spread if spot drops 1%",
   "summary": "Spot drop trigger, a put 3% lower as protection, hourly hedge",
   "model": "claude-sonnet-5-5",
   "recorded_utc": "2026-11-10T22:28:08Z",
@@ -554,7 +554,7 @@ window.CHAT_REPLAYS = [
  },
  {
   "format": "chat-replay-1",
-  "title": "Buy ATM straddle once per day",
+  "title": "Buy straddle once per day",
   "summary": "Long straddle at the open, closed 30 minutes before the close, no hedge",
   "model": "claude-sonnet-5-5",
   "recorded_utc": "2026-11-10T22:30:44Z",

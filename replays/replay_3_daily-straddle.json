@@ -1,6 +1,6 @@
 {
   "format": "chat-replay-1",
-  "title": "Buy ATM straddle once per day",
+  "title": "Buy straddle once per day",
   "summary": "Long straddle at the open, closed 30 minutes before the close, no hedge",
   "model": "claude-sonnet-5-5",
   "recorded_utc": "2026-11-10T22:30:44Z",

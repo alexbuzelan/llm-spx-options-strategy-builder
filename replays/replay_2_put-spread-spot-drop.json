@@ -1,6 +1,6 @@
 {
   "format": "chat-replay-1",
-  "title": "Sell ATM put spread if spot drops 1%",
+  "title": "Sell put spread if spot drops 1%",
   "summary": "Spot drop trigger, a put 3% lower as protection, hourly hedge",
   "model": "claude-sonnet-5-5",
   "recorded_utc": "2026-11-10T22:28:08Z",

@@ -3509,8 +3509,8 @@ var hyparquet=(()=>{var G=Object.defineProperty;var Ne=Object.getOwnPropertyDesc
     var html = "";
     if (list.length) html += "<p><b>" + (after ? "Watch another recorded conversation:" : "Watch a recorded conversation:") + "</b></p>" +
       '<div class="ideas">' + list.map(function (r, i) {
-        return '<button type="button" class="idea" data-rp="' + i + '"><b>' + esc(r.title || "Recorded conversation") + "</b>" +
-          (r.summary ? "<span>" + esc(r.summary) + "</span>" : "") + "</button>";
+        // Titles only: the summary stays in the recording but is not shown
+        return '<button type="button" class="idea" data-rp="' + i + '"><b>' + esc(r.title || "Recorded conversation") + "</b></button>";
       }).join("") + "</div>";
     html += "<p><b>" + (list.length ? "Or chat live with your own Anthropic API key:" : "Chat live with your own Anthropic API key:") + "</b></p>" +
       '<form class="as-key"><input type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-..." aria-label="Anthropic API key">' +
