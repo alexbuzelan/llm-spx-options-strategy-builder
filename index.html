@@ -260,8 +260,69 @@
   .as-key { display: flex; gap: 6px; }
   .as-key input { flex: 1; min-width: 0; font: inherit; font-size: 13px; padding: 5px 8px; border: 1px solid var(--line); border-radius: 6px; }
   .as-key .btn { padding: 5px 12px; }
-  .as-keynote { font-size: 11.5px; color: var(--dim); }
+  .as-keynote { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--dim); }
+  .as-keynote svg { flex: none; color: var(--pos); }
   .as-welcome.enter { animation: bubin .25s ease-out; }
+  /* Welcome window */
+  .wl { position: fixed; inset: 0; z-index: 100; font-family: var(--font-sans); color: var(--text); }
+  .wl[hidden] { display: none; }
+  .wl-scrim { position: fixed; inset: 0; background: rgba(24,34,45,.48); backdrop-filter: blur(2px); }
+  .wl-wrap { position: relative; height: 100%; overflow-y: auto; display: flex; align-items: center; justify-content: center; padding: 24px 16px; pointer-events: none; }
+  .wl-box { pointer-events: auto; width: 100%; max-width: 920px; margin: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+            box-shadow: 0 24px 60px rgba(20,26,40,.28), 0 2px 6px rgba(20,26,40,.10); padding: 30px 32px 22px; position: relative; }
+  .wl-x { position: absolute; top: 14px; right: 14px; width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--line);
+          background: #fff; color: var(--dim); cursor: pointer; display: grid; place-items: center; padding: 0; }
+  .wl-x:hover { color: var(--text); border-color: var(--border-strong); }
+  .wl h1 { margin: 0 0 6px; font-size: 26px; font-weight: 650; letter-spacing: -.01em; padding-right: 36px; }
+  .wl-lede { margin: 0 0 22px; color: var(--dim); font-size: 15px; line-height: 1.5; }
+  .wl-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  .wl-tile { display: flex; flex-direction: column; text-align: left; font: inherit; color: inherit; background: #fff;
+             border: 1px solid var(--line); border-radius: 12px; padding: 18px 18px 16px; cursor: pointer;
+             transition: border-color .15s, box-shadow .15s, transform .15s; }
+  .wl-tile:hover, .wl-tile:focus-visible { border-color: var(--accent); box-shadow: 0 8px 22px rgba(31,95,139,.14); transform: translateY(-2px); outline: none; }
+  .wl-primary { border: 2px solid var(--accent); padding: 17px 17px 15px; }
+  .wl-ico { width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; margin-bottom: 14px; }
+  .wl-t1 .wl-ico { background: var(--accent-soft); color: var(--accent); }
+  .wl-t2 .wl-ico { background: #f3edfc; color: var(--iv); }
+  .wl-t3 .wl-ico { background: #eef1f4; color: #9aa6b2; }
+  .wl-name { font-size: 18px; font-weight: 650; margin-bottom: 4px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; white-space: nowrap; }
+  .wl-rec { font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--accent);
+            background: var(--accent-soft); border-radius: 999px; padding: 2px 8px; }
+  .wl-soon { font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: #8a5a00;
+             background: #fbefd6; border: 1px solid #f0d9a8; border-radius: 999px; padding: 2px 8px; }
+  .wl-desc { font-size: 14px; color: var(--dim); line-height: 1.45; flex: 1; margin-bottom: 16px; }
+  .wl-safe { display: flex; align-items: center; gap: 6px; margin: 0 0 12px; font-size: 11.5px; color: var(--dim); line-height: 1.35; }
+  .wl-safe svg { flex: none; color: var(--pos); }
+  .wl-needs { display: flex; align-items: center; gap: 8px; border-top: 1px solid #eceff2; padding-top: 12px; font-size: 12.5px; }
+  .wl-needs > span { color: var(--dim); }
+  .wl-pill { font-weight: 600; border-radius: 999px; padding: 2px 10px; }
+  .wl-none { color: var(--pos); background: var(--pos-soft); }
+  .wl-key { color: var(--iv); background: #f3edfc; }
+  .wl-needs > .wl-go { margin-left: auto; font-weight: 600; color: var(--accent); white-space: nowrap; }
+  .wl-tile:hover .wl-go { text-decoration: underline; }
+  .wl-off { cursor: not-allowed; background: #fafbfc; border: 1.5px dashed #c9d1d9; padding: 17.5px 17.5px 15.5px; }
+  .wl-off:hover { border-color: #c9d1d9; box-shadow: none; transform: none; }
+  .wl-off .wl-name { color: var(--dim); }
+  .wl-off .wl-desc { color: #8a96a2; }
+  .wl-off .wl-none { color: #7c8a96; background: #eef1f4; }
+  .wl-foot { margin-top: 18px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--dim); }
+  .wl-foot label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+  .as-help { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--line); background: #fff; color: var(--dim);
+             font: 600 12px var(--font-sans); cursor: pointer; padding: 0; flex: none; }
+  .as-help:hover { color: var(--accent); border-color: var(--accent); }
+  @media (max-width: 760px) {
+    .wl-box { padding: 24px 18px 18px; }
+    .wl h1 { font-size: 22px; }
+    .wl-lede { font-size: 14px; margin-bottom: 16px; }
+    .wl-tiles { grid-template-columns: 1fr; gap: 10px; }
+    .wl-tile { display: grid; grid-template-columns: 44px 1fr; column-gap: 14px; padding: 14px; }
+    .wl-primary { padding: 13px; }
+    .wl-off { padding: 13.5px; }
+    .wl-ico { width: 44px; height: 44px; margin: 0; grid-row: 1 / span 4; }
+    .wl-desc { margin-bottom: 10px; font-size: 13.5px; }
+    .wl-name, .wl-desc, .wl-needs, .wl-safe { grid-column: 2; }
+    .wl-needs { padding-top: 10px; }
+  }
   .bubble .line-in { display: block; }
   .bubble.enter { animation: bubin .25s ease-out; }
   .bubble.enter .line-in { animation: bubin .25s ease-out; }
@@ -660,6 +721,7 @@
         <button class="as-xbtn" id="asDock" type="button" title="Back to the panel">⤡ Back to panel</button>
         <button class="linkbtn" id="asSave" type="button" hidden>Save conversation</button>
         <button class="linkbtn" id="asNew" type="button" disabled>＋ New chat</button>
+        <button class="as-help" id="asHelp" type="button" title="About this page" aria-label="About this page">?</button>
         <button type="button" class="as-pin" id="asPin" aria-pressed="false" title="Pin: keep the assistant open beside the cards"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 2h4l-.6 4.2L12 8.5V10H4V8.5l2.6-2.3L6 2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M8 10v4.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button>
       </div>
       <div class="as-mini" id="asMini" aria-label="Strategy rules"></div>
@@ -895,6 +957,45 @@
       <div class="tscroll cs-narrow" id="daCsTable"><div class="empty">Run a backtest to see the curve structures.</div></div>
       <div class="foot" id="daCsNote"></div>
     </section>
+  </div>
+</div>
+
+<!-- Welcome window: shown on load until the visitor ticks Don't show again; the ? button in the assistant reopens it -->
+<div id="wlWin" class="wl" hidden>
+  <div class="wl-scrim" data-wl-close></div>
+  <div class="wl-wrap">
+    <div class="wl-box" role="dialog" aria-modal="true" aria-labelledby="wlTitle">
+      <button class="wl-x" type="button" aria-label="Close" data-wl-close>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 3l8 8M11 3l-8 8"/></svg>
+      </button>
+      <h1 id="wlTitle">Test an options strategy just by describing it</h1>
+      <p class="wl-lede">AI builds the strategy from your words.<br>The backtest shows how it would have performed on real S&amp;P500 data.</p>
+      <div class="wl-tiles">
+        <button class="wl-tile wl-t1 wl-primary" type="button" id="wlDemo">
+          <span class="wl-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></span>
+          <span class="wl-name">Watch a demo <span class="wl-rec">Start here</span></span>
+          <span class="wl-desc">See how it works on real examples, no setup needed.</span>
+          <span class="wl-needs"><span>Needs</span><b class="wl-pill wl-none">Nothing</b><span class="wl-go">Watch demo &rarr;</span></span>
+        </button>
+        <button class="wl-tile wl-t2" type="button" id="wlLive">
+          <span class="wl-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 11h.01M12 11h.01M15 11h.01"/></svg></span>
+          <span class="wl-name">Try it live</span>
+          <span class="wl-desc">Chat with the AI yourself and test your own trading idea.</span>
+          <span class="wl-safe"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Sent only to Anthropic. Never stored.</span>
+          <span class="wl-needs"><span>Needs</span><b class="wl-pill wl-key">Your API key</b><span class="wl-go">Chat live &rarr;</span></span>
+        </button>
+        <div class="wl-tile wl-t3 wl-off" aria-disabled="true">
+          <span class="wl-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12v9H4v-9"/><path d="M2 7h20v5H2z"/><path d="M12 21V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg></span>
+          <span class="wl-name">Free live chat <span class="wl-soon">Coming soon</span></span>
+          <span class="wl-desc">Test your ideas with AI, then connect them to your broker.</span>
+          <span class="wl-needs"><span>Needs</span><b class="wl-pill wl-none">Nothing</b></span>
+        </div>
+      </div>
+      <div class="wl-foot">
+        <span>You can reopen this window any time with the ? button in the assistant.</span>
+        <label><input type="checkbox" id="wlNoShow"> Don't show again</label>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -3378,10 +3479,11 @@ var hyparquet=(()=>{var G=Object.defineProperty;var Ne=Object.getOwnPropertyDesc
     $("asNew").disabled = chat.sending || (!ok && !chat.replaying && !chat.userKey);
     $("asIdeas").disabled = !ok || chat.sending;
     $("asSave").disabled = chat.sending || chat.replaying;
+    $("asMsg").placeholder = chatCfg().keyOk || chat.replaying ? AS_PLACEHOLDER : "Pick a demo or add a key to start";
     asSync();
   }
   // Called on input and wherever the page changes the box itself.
-  var AS_MIN_H = 40, AS_MAX_H = 156;
+  var AS_MIN_H = 40, AS_MAX_H = 156, AS_PLACEHOLDER = $("asMsg").placeholder;
   function asSync() {
     var ta = $("asMsg");
     ta.style.height = "0px";
@@ -3404,8 +3506,7 @@ var hyparquet=(()=>{var G=Object.defineProperty;var Ne=Object.getOwnPropertyDesc
   function chatWelcome(after) {
     var list = chatReplays(), box = document.createElement("div");
     box.className = "as-welcome enter";
-    var html = after ? "" : "<p>Describe a trading idea in plain English and the assistant turns it into a strategy the " +
-      "backtester can run, using the Claude API with tools. Every strategy is checked by the page's validator.</p>";
+    var html = "";
     if (list.length) html += "<p><b>" + (after ? "Watch another recorded conversation:" : "Watch a recorded conversation:") + "</b></p>" +
       '<div class="ideas">' + list.map(function (r, i) {
         return '<button type="button" class="idea" data-rp="' + i + '"><b>' + esc(r.title || "Recorded conversation") + "</b>" +
@@ -3414,7 +3515,9 @@ var hyparquet=(()=>{var G=Object.defineProperty;var Ne=Object.getOwnPropertyDesc
     html += "<p><b>" + (list.length ? "Or chat live with your own Anthropic API key:" : "Chat live with your own Anthropic API key:") + "</b></p>" +
       '<form class="as-key"><input type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-..." aria-label="Anthropic API key">' +
       '<button class="btn" type="submit">Use key</button></form>' +
-      '<p class="as-keynote">The key stays in this browser tab, is sent only to Anthropic, and is forgotten when the page is closed or reloaded.</p>';
+      '<p class="as-keynote"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" ' +
+      'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/>' +
+      '<path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Your key stays in this browser tab, is sent only to Anthropic, and is never stored.</p>';
     box.innerHTML = html;
     box.addEventListener("click", function (e) {
       var b = e.target.closest && e.target.closest("[data-rp]");
@@ -3451,8 +3554,8 @@ var hyparquet=(()=>{var G=Object.defineProperty;var Ne=Object.getOwnPropertyDesc
       return JSON.parse(JSON.stringify(res));
     };
   }
-  // The recorded user message is typed at about 25 characters a second, at most 3 seconds per message.
-  var CHAT_TYPE_MS = 40, CHAT_TYPE_MAX_MS = 3000;
+  // The recorded user message is typed at about 17 characters a second, at most 5 seconds per message.
+  var CHAT_TYPE_MS = 60, CHAT_TYPE_MAX_MS = 5000;
   async function chatTypeInto(text) {
     var ta = $("asMsg"), n = text.length, ms = Math.min(CHAT_TYPE_MS, CHAT_TYPE_MAX_MS / Math.max(1, n));
     for (var i = 1; i <= n && !chat.replayStop; i++) {
@@ -3476,6 +3579,7 @@ var hyparquet=(()=>{var G=Object.defineProperty;var Ne=Object.getOwnPropertyDesc
         await chatSleep(chatReduced.matches ? 0 : (i ? 1400 : 600));
         if (chat.replayStop) break;
         await chatTypeInto(String(rp.turns[i].user || ""));
+        await chatSleep(chatReduced.matches ? 0 : 500);   // a short pause, as if reading it over before sending
         if (chat.replayStop) break;
         chat.replaying = true;
         await chatSendMessage();
@@ -3557,6 +3661,42 @@ var hyparquet=(()=>{var G=Object.defineProperty;var Ne=Object.getOwnPropertyDesc
   $("asSave").hidden = !CHAT_RECORD;
   $("asSave").addEventListener("click", chatSaveRec);
   chatStart();
+
+  /* ---------- Welcome window ---------- */
+  // Shown on load until the visitor ticks Don't show again; the ? button in the assistant reopens it.
+  var WL_KEY = "spxShowcase.welcomeOff", wlLast = null;
+  function wlOpen() {
+    wlLast = document.activeElement;
+    $("wlWin").hidden = false;
+    $("wlDemo").focus();
+  }
+  function wlClose(keepFocus) {
+    if ($("wlWin").hidden) return;
+    $("wlWin").hidden = true;
+    try { localStorage.setItem(WL_KEY, $("wlNoShow").checked ? "1" : "0"); } catch (e) {}
+    if (!keepFocus && wlLast && wlLast.focus) wlLast.focus();
+  }
+  $("wlWin").addEventListener("click", function (e) { if (e.target.closest("[data-wl-close]")) wlClose(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("wlWin").hidden) wlClose(); });
+  $("wlDemo").addEventListener("click", function () {
+    wlClose(true);
+    var list = chatReplays();
+    var rp = list.filter(function (r) { return /once per day/i.test(r.title || ""); })[0] || list[0];
+    if (rp && !chat.replaying && !chat.sending) chatReplay(rp);
+  });
+  $("wlLive").addEventListener("click", function () {
+    wlClose(true);
+    if (chat.replaying) return;
+    var key = $("asLog").querySelector(".as-key input");
+    if (key) key.focus(); else $("asMsg").focus();
+  });
+  $("asHelp").addEventListener("click", wlOpen);
+  (function () {
+    var off = false;
+    try { off = localStorage.getItem(WL_KEY) === "1"; } catch (e) {}
+    $("wlNoShow").checked = off;
+    if (!off) wlOpen();
+  })();
 
   /* ---------- P&L and snapshot card, Trade log card ---------- */
   var det = { res: null, j: 0, key: "net", hide: {}, exp: "front", atm: {} };
