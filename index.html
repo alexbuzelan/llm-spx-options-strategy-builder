@@ -3451,11 +3451,13 @@ var hyparquet=(()=>{var G=Object.defineProperty;var Ne=Object.getOwnPropertyDesc
       return JSON.parse(JSON.stringify(res));
     };
   }
+  // The recorded user message is typed at about 25 characters a second, at most 3 seconds per message.
+  var CHAT_TYPE_MS = 40, CHAT_TYPE_MAX_MS = 3000;
   async function chatTypeInto(text) {
-    var ta = $("asMsg"), n = text.length, step = Math.max(1, Math.ceil(n / 45));
-    for (var i = step; i < n + step && !chat.replayStop; i += step) {
+    var ta = $("asMsg"), n = text.length, ms = Math.min(CHAT_TYPE_MS, CHAT_TYPE_MAX_MS / Math.max(1, n));
+    for (var i = 1; i <= n && !chat.replayStop; i++) {
       ta.value = text.slice(0, i); asSync();
-      if (!chatReduced.matches) await chatSleep(22);
+      if (!chatReduced.matches) await chatSleep(ms);
     }
   }
   async function chatReplay(rp) {
